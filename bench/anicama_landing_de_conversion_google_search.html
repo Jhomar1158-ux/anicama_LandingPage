@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Anicama Consulting & Tax — Evaluación contable‑tributaria en 24 h</title>
+  <meta name="description" content="Evita multas y duerme tranquilo. Evaluación contable‑tributaria en 24 h para MYPEs y empresas en Lima. Respuesta hoy." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      /* Paleta aproximada basada en anicama.pe (logo dorado + fondo oscuro) */
+      --gold-500:#C8A654; /* dorado brand */
+      --gold-600:#B8953E;
+      --ink-900:#0F1720; /* casi negro con tinte azul marino */
+      --ink-800:#141C26;
+      --ink-700:#1A2532;
+      --slate-300:#D6D9DE;
+      --slate-200:#E6E8EC;
+      --slate-100:#F4F6F8;
+      --white:#FFFFFF;
+      --accent:#C8A654; /* para CTAs */
+      --radius:14px;
+      --shadow:0 10px 30px rgba(0,0,0,.15);
+      --section-alt:#FAF7F0; /* crema suave para alternar secciones */
+      --brand-red:#D93025; /* rojo KPIs */
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#0b0f14;background:var(--white)}
+    h1,h2{font-family:Poppins,Inter,system-ui,sans-serif;letter-spacing:-.02em;margin:0 0 .6rem}
+    h1{font-size:clamp(28px,4vw,44px);line-height:1.1}
+    h2{font-size:clamp(22px,3vw,30px)}
+    p{margin:.5rem 0 0;color:#2a3340}
+    .container{max-width:1100px;margin:0 auto;padding:0 20px}
+
+    /* HERO */
+    .hero{background:linear-gradient(180deg,var(--ink-900),var(--ink-800));color:var(--white);position:relative;overflow:hidden}
+    .hero::after{content:"";position:absolute;inset:auto -10% -40% -10%;height:380px;background:radial-gradient(60% 60% at 50% 0, rgba(200,166,84,.25), transparent 60%);} 
+    .hero-wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:center;padding:72px 0}
+    .hero h1 span{color:var(--gold-500)}
+    .badges{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px}
+    .badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.2);padding:8px 12px;border-radius:999px;font-size:13px;color:#e9edf3}
+
+    /* Card formulario */
+    .card{background:var(--white);color:#111;border-radius:var(--radius);box-shadow:var(--shadow);padding:22px}
+    .card h3{margin:0 0 .75rem;font-size:20px}
+    form{display:grid;gap:10px}
+    label{font-size:13px;color:#334}
+    input,select,button,textarea{font:inherit}
+    .input{width:100%;border:1px solid var(--slate-200);border-radius:10px;padding:12px 12px;background:#fff}
+    .input:focus{outline:2px solid rgba(200,166,84,.4);border-color:var(--gold-500)}
+    .cta{background:var(--accent);color:#111;font-weight:700;border:none;border-radius:12px;padding:14px 16px;cursor:pointer}
+    .cta:hover{filter:brightness(.95)}
+    .cta:active{transform:translateY(1px)}
+    .subnote{font-size:12px;color:#5b6470}
+
+    /* Secciones */
+    section{padding:70px 0}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    .card.feature{background:var(--slate-100)}
+    .feature h3{font-size:18px;margin:.25rem 0}
+    .feature p{font-size:14px;color:#3b4654}
+
+    /* Logos */
+    .logos{display:flex;gap:28px;flex-wrap:wrap;align-items:center;opacity:.85}
+    .logos img{height:32px;filter:grayscale(1);opacity:.85}
+
+    /* FAQs */
+    details{border:1px solid var(--slate-200);border-radius:12px;padding:14px 16px;background:var(--white)}
+    details+details{margin-top:10px}
+    summary{font-weight:600;cursor:pointer}
+    summary::-webkit-details-marker{display:none}
+
+    /* CTA final */
+    .cta-block{background:linear-gradient(180deg,var(--ink-800),var(--ink-700));color:#fff;border-radius:20px;padding:28px;display:flex;gap:18px;align-items:center;justify-content:space-between}
+
+    /* KPIs / Stats */
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;text-align:center;margin-top:40px}
+    .stat-box{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:28px}
+    .stat-box h3{font-size:34px;color:var(--brand-red);margin:0}
+    .stat-box p{margin-top:6px;font-weight:600;color:#1a2532}
+
+    /* Footer */
+    footer{background:#0c1219;color:#9fb0c6;padding:28px 0;font-size:14px}
+    footer a{color:#cdb26a}
+
+    /* Responsive */
+    @media (max-width: 900px){
+      .hero-wrap{grid-template-columns:1fr}
+      .grid-4{grid-template-columns:1fr 1fr}
+      .grid-3,.stats{grid-template-columns:1fr}
+      .cta-block{flex-direction:column;align-items:flex-start}
+    }
+  </style>
+</head>
+<body>
+  <header class="hero" role="banner">
+    <div class="container hero-wrap">
+      <div>
+        <h1>¿Necesita servicio contable?<br><span>Somos su partner estratégico</span> en consultoría integral</h1>
+        <p style="color:#cfe1ff;max-width:50ch">Transformamos la complejidad normativa en ventajas competitivas con un enfoque preventivo. Atención a MYPEs y empresas en Lima.</p>
+        <div class="badges" aria-label="Sellos de confianza">
+          <div class="badge">🛡️ Expertos preventivos</div>
+          <div class="badge">⚙️ Tecnología avanzada</div>
+          <div class="badge">🤝 Confianza total</div>
+        </div>
+      </div>
+      <div>
+        <div class="card" aria-labelledby="form-title">
+          <h3 id="form-title">Solicita tu evaluación gratuita</h3>
+          <form id="lead-form" novalidate>
+            <div>
+              <label for="name">Nombre y apellido</label>
+              <input class="input" id="name" name="name" autocomplete="name" required placeholder="Tu nombre" />
+            </div>
+            <div>
+              <label for="email">Correo</label>
+              <input class="input" id="email" name="email" type="email" autocomplete="email" required placeholder="tucorreo@empresa.com" />
+            </div>
+            <div>
+              <label for="phone">Celular</label>
+              <input class="input" id="phone" name="phone" inputmode="tel" placeholder="9xx xxx xxx" />
+            </div>
+            <div>
+              <label for="service">¿Qué te interesa?</label>
+              <select class="input" id="service" name="service">
+                <option>Asesoría Tributaria</option>
+                <option>Asesoría Contable</option>
+                <option>Asesoría Laboral</option>
+                <option>ERP / Virtualización</option>
+              </select>
+            </div>
+            <button class="cta" type="submit">Quiero mi evaluación gratuita</button>
+            <p class="subnote">Te contactamos en &lt; 2 h hábiles. Sin compromiso.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- KPIs: se muestra tras el banner hero -->
+  <section style="background:var(--section-alt)">
+    <div class="container">
+      <div class="stats" aria-label="Indicadores clave">
+        <div class="stat-box">
+          <h3>15</h3>
+          <p>AÑOS DE EXPERIENCIA</p>
+        </div>
+        <div class="stat-box">
+          <h3>200</h3>
+          <p>CLIENTES ATENDIDOS</p>
+        </div>
+        <div class="stat-box">
+          <h3>0</h3>
+          <p>MULTAS RECIBIDAS</p>
+        </div>
+        <div class="stat-box">
+          <h3>100%</h3>
+          <p>SATISFACCIÓN</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <section class="container" aria-labelledby="social-proof">
+      <h2 id="social-proof">Confían en nuestra experiencia</h2>
+      <p class="subnote">Algunas de las empresas que impulsamos</p>
+      <div class="logos" style="margin-top:14px">
+        <img alt="Femeneroy" src="https://dummyimage.com/120x32/eeeeee/aaaaaa.png&text=Femeneroy" />
+        <img alt="SIGSA" src="https://dummyimage.com/120x32/eeeeee/aaaaaa.png&text=SIGSA" />
+        <img alt="Ferreycorp" src="https://dummyimage.com/120x32/eeeeee/aaaaaa.png&text=Ferreycorp" />
+        <img alt="San Clemente" src="https://dummyimage.com/120x32/eeeeee/aaaaaa.png&text=San+Clemente" />
+      </div>
+    </section>
+
+    <section style="background:var(--slate-100)" aria-labelledby="servicios">
+      <div class="container">
+        <h2 id="servicios">Servicios de Consultoría Integral</h2>
+        <p class="subnote">Protegemos y potenciamos su empresa: del cumplimiento al crecimiento.</p>
+        <div class="grid-4" style="margin-top:16px">
+          <article class="card feature">
+            <h3>Asesoría Contable</h3>
+            <p>Cumplimiento de NIC y preparación integral para auditorías externas.</p>
+          </article>
+          <article class="card feature">
+            <h3>Asesoría Tributaria</h3>
+            <p>Evaluación de transacciones, mitigación de riesgos y optimización fiscal.</p>
+          </article>
+          <article class="card feature">
+            <h3>Asesoría Laboral</h3>
+            <p>Contratos, planillas y prevención ante supervisiones del MTPE.</p>
+          </article>
+          <article class="card feature">
+            <h3>ERP Virtual</h3>
+            <p>Gestión empresarial con tecnología SAP para control en tiempo real.</p>
+          </article>
+        </div>
+        <div class="grid-4" style="margin-top:16px">
+          <article class="card feature">
+            <h3>Asesoría Adm. Financiera</h3>
+            <p>Análisis de estados y evaluación de proyectos para decidir con datos.</p>
+          </article>
+          <article class="card feature">
+            <h3>Asesoría Legal</h3>
+            <p>Reducción de riesgos legales y alineamiento tributario‑laboral.</p>
+          </article>
+          <article class="card feature">
+            <h3>Gestión de Inventarios</h3>
+            <p>Control de activos y existencias con informes de bajas y optimización.</p>
+          </article>
+          <article class="card feature">
+            <h3>Revisiones Fiscales y Laborales</h3>
+            <p>Diagnóstico integral ante entidades fiscalizadoras.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section style="background:var(--section-alt)" aria-labelledby="pilares">
+      <div class="container">
+        <h2 id="pilares">Nuestros Pilares</h2>
+        <div class="grid-4" style="margin-top:16px">
+          <div class="card feature">
+            <h3>Estrategia</h3>
+            <p>Planeamientos metódicos y exitosos para su negocio.</p>
+          </div>
+          <div class="card feature">
+            <h3>Prevención</h3>
+            <p>Nos anticipamos a contingencias fiscales y laborales.</p>
+          </div>
+          <div class="card feature">
+            <h3>Disposición</h3>
+            <p>Excelencia y celeridad en cualquier contexto.</p>
+          </div>
+          <div class="card feature">
+            <h3>Confianza</h3>
+            <p>Vínculos de sociedad basados en confidencialidad.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container" aria-labelledby="tecnologia">
+      <h2 id="tecnologia">Tecnología de vanguardia</h2>
+      <p class="subnote">G Suite con almacenamiento seguro e ilimitado. SAP® Partner para ERP virtual que reduce costos y aumenta eficiencia.</p>
+      <div class="logos" style="margin-top:14px">
+        <img alt="SAP Partner" src="https://dummyimage.com/120x32/eeeeee/aaaaaa.png&text=SAP+Partner" />
+        <img alt="G Suite Partner" src="https://dummyimage.com/120x32/eeeeee/aaaaaa.png&text=G+Suite+Partner" />
+      </div>
+    </section>
+
+    <section style="background:var(--slate-100)" aria-labelledby="nosotros">
+      <div class="container">
+        <h2 id="nosotros">Quiénes Somos</h2>
+        <p>Firma de consultoría integral en asesoría contable, tributaria, laboral y administrativa financiera. Enfoque preventivo + tecnología para anticipar riesgos y maximizar oportunidades.</p>
+        <div class="grid-3" style="margin-top:16px">
+          <div class="card feature">
+            <h3>Misión</h3>
+            <p>Transformar complejidad normativa en ventajas competitivas con disposición, prevención y confianza.</p>
+          </div>
+          <div class="card feature">
+            <h3>Visión</h3>
+            <p>Ser la firma referente en innovación y excelencia en el Perú.</p>
+          </div>
+          <div class="card feature">
+            <h3>Gobierno Corporativo</h3>
+            <p>Estándares GRI. 0 multas y 0 casos de incumplimiento.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="background:var(--section-alt)" aria-labelledby="faq">
+      <div class="container">
+        <h2 id="faq">Preguntas frecuentes</h2>
+        <details>
+          <summary>¿Qué tipo de empresas atienden?</summary>
+          <p>MYPEs y empresas medianas en Lima, con planes escalables.</p>
+        </details>
+        <details>
+          <summary>¿Son SAP® Partner y trabajan con G Suite?</summary>
+          <p>Sí. Ofrecemos ERP virtual basado en tecnología SAP y repositorios seguros en la nube.</p>
+        </details>
+        <details>
+          <summary>¿Cómo garantizan el cumplimiento?</summary>
+          <p>Operamos con estándares GRI y gobierno corporativo; historial sin multas reportadas.</p>
+        </details>
+        <details>
+          <summary>¿Puedo solicitar un diagnóstico previo?</summary>
+          <p>Claro. Ofrecemos una evaluación preliminar gratuita con plan 30‑60‑90 días.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="container" aria-labelledby="contacto">
+      <h2 id="contacto">Contacto</h2>
+      <div class="grid-3" style="margin-top:16px">
+        <div class="card feature">
+          <h3>Dirección</h3>
+          <p>Av. Ayacucho 1331, Urb. La Liguria – Surco, Lima – Perú</p>
+        </div>
+        <div class="card feature">
+          <h3>Teléfonos</h3>
+          <p>978 150 6492 · 934 641 272</p>
+        </div>
+        <div class="card feature">
+          <h3>Email</h3>
+          <p>info@anicama.pe · contabilidad@anicama.pe</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="container" aria-label="Llamado a la acción final">
+      <div class="cta-block">
+        <div>
+          <h2>Listo para evitar multas y dormir tranquilo</h2>
+          <p style="margin-top:6px;opacity:.9">Agenda tu evaluación gratuita y recibe un diagnóstico rápido.</p>
+        </div>
+        <button class="cta" onclick="document.querySelector('#name').focus()">Agendar mi diagnóstico</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div style="display:flex;gap:30px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+        <p>© 2025 Anicama Consulting & Tax — Lima, Perú</p>
+        <nav aria-label="legal">
+          <a href="#">Política de privacidad</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
