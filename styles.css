@@ -978,9 +978,10 @@ ul {
 .tech-logo__img {
   max-width: 100%;
   height: auto;
-  filter: brightness(0) invert(1);
   opacity: 0.9;
-  transition: opacity var(--transition-normal);
+  transition: all var(--transition-normal);
+  object-fit: contain;
+  border-radius: var(--radius-md);
 }
 
 .tech-logo:hover .tech-logo__img {
@@ -999,8 +1000,9 @@ ul {
   }
   
   .tech-logo__img {
-    width: 80px;
-    height: 40px;
+    width: 100px;
+    height: 50px;
+    object-fit: contain;
   }
 }
 
@@ -1481,6 +1483,8 @@ ul {
   margin-left: auto;
   margin-right: auto;
   margin-bottom: var(--space-16);
+  justify-content: center;
+  justify-items: center;
 }
 
 .servicio-card {
@@ -1529,12 +1533,22 @@ ul {
 @media (min-width: 481px) {
   .servicios__grid {
     grid-template-columns: repeat(2, 1fr);
+    justify-content: center;
+    justify-items: center;
   }
 }
 
 @media (min-width: 769px) {
-  .servicios__grid {
+  .servicios__grid--main {
     grid-template-columns: repeat(2, 1fr);
+    justify-content: center;
+    justify-items: center;
+  }
+  
+  .servicios__grid--complementary {
+    grid-template-columns: repeat(3, 1fr);
+    justify-content: center;
+    justify-items: center;
   }
   
   .servicio-card {
@@ -1548,8 +1562,17 @@ ul {
 }
 
 @media (min-width: 1200px) {
-  .servicios__grid {
+  .servicios__grid--main {
     grid-template-columns: repeat(4, 1fr);
+    justify-content: center;
+    justify-items: center;
+  }
+  
+  .servicios__grid--complementary {
+    grid-template-columns: repeat(3, 1fr);
+    justify-content: center;
+    justify-items: center;
+    max-width: 800px;
   }
 }
 
@@ -2355,7 +2378,7 @@ ul {
   width: auto;
   opacity: 0.7;
   transition: opacity var(--transition-fast);
-  filter: brightness(0) invert(1);
+  object-fit: contain;
 }
 
 .footer__partner-logo:hover {
