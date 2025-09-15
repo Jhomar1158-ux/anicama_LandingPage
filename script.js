@@ -78,6 +78,12 @@ const utils = {
   isValidPhone(phone) {
     const phoneRegex = /^[9]\d{8}$/;
     return phoneRegex.test(phone.replace(/\s/g, ''));
+  },
+
+  // Validate RUC (11 digits)
+  isValidRUC(ruc) {
+    const rucRegex = /^\d{11}$/;
+    return rucRegex.test(ruc.replace(/\s/g, ''));
   }
 };
 
@@ -347,6 +353,13 @@ const formHandler = {
           if (!utils.isValidPhone(value)) {
             isValid = false;
             errorMessage = 'Ingrese un celular válido (debe empezar con 9 y tener 9 dígitos)';
+          }
+          break;
+          
+        case 'ruc':
+          if (!utils.isValidRUC(value)) {
+            isValid = false;
+            errorMessage = 'El RUC debe tener exactamente 11 dígitos';
           }
           break;
         
