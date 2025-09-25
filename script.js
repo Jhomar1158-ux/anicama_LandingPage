@@ -9,7 +9,7 @@ const CONFIG = {
     gaId: 'GA_MEASUREMENT_ID' // TODO: Replace with actual GA ID
   },
   form: {
-    endpoint: '', // TODO: Configure form submission endpoint
+    googleAppsScriptUrl: 'https://script.google.com/macros/s/AKfycbx8Wl2glRNG7AU1vKOcr7U8UtUneCaHKe3JxthHdqBuTxqteeFP9UyVgEMYVtQi_f6DiA/exec',
     timeout: 10000
   }
 };
@@ -74,16 +74,18 @@ const utils = {
     return emailRegex.test(email);
   },
 
-  // Validate phone number (simple format)
+  // Validate phone number (strict format: only numbers, max 9 digits)
   isValidPhone(phone) {
-    const phoneRegex = /^[9]\d{8}$/;
-    return phoneRegex.test(phone.replace(/\s/g, ''));
+    const cleanPhone = phone.replace(/\D/g, ''); // Remove all non-digits
+    const phoneRegex = /^\d{1,9}$/; // Only digits, max 9 digits
+    return phoneRegex.test(cleanPhone) && cleanPhone.length >= 7; // Min 7, max 9 digits
   },
 
-  // Validate RUC (11 digits)
+  // Validate RUC (more flexible - 8 to 11 digits)
   isValidRUC(ruc) {
-    const rucRegex = /^\d{11}$/;
-    return rucRegex.test(ruc.replace(/\s/g, ''));
+    const cleanRuc = ruc.replace(/[\s\-]/g, ''); // Remove spaces and dashes
+    const rucRegex = /^\d{8,11}$/; // Accept 8-11 digits (DNI or RUC)
+    return rucRegex.test(cleanRuc);
   }
 };
 
@@ -320,6 +322,19 @@ const formHandler = {
           this.validateField(input);
         }
       }, 300));
+
+      // Validación especial para campos de celular: solo números y máximo 9 dígitos
+      if (input.name === 'celular' || input.name === 'telefono') {
+        input.addEventListener('input', (e) => {
+          // Remover todo lo que no sea número
+          let value = e.target.value.replace(/\D/g, '');
+          // Limitar a 9 dígitos máximo
+          if (value.length > 9) {
+            value = value.slice(0, 9);
+          }
+          e.target.value = value;
+        });
+      }
     });
   },
 
@@ -352,14 +367,14 @@ const formHandler = {
         case 'celular':
           if (!utils.isValidPhone(value)) {
             isValid = false;
-            errorMessage = 'Ingrese un celular válido (debe empezar con 9 y tener 9 dígitos)';
+            errorMessage = 'Ingrese solo números, entre 7 y 9 dígitos (ej: 987654321)';
           }
           break;
           
         case 'ruc':
           if (!utils.isValidRUC(value)) {
             isValid = false;
-            errorMessage = 'El RUC debe tener exactamente 11 dígitos';
+            errorMessage = 'Ingrese un RUC/DNI válido (8-11 dígitos)';
           }
           break;
         
@@ -414,12 +429,19 @@ const formHandler = {
   validateForm(form) {
     const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
     let isValid = true;
+    const failedFields = [];
 
     inputs.forEach(input => {
       if (!this.validateField(input)) {
         isValid = false;
+        failedFields.push(`${input.name}: "${input.value}"`);
       }
     });
+
+    // Debug: mostrar qué campos fallaron
+    if (!isValid) {
+      console.log('Campos que fallaron la validación:', failedFields);
+    }
 
     return isValid;
   },
@@ -471,37 +493,67 @@ const formHandler = {
     });
   },
 
-  // TODO: Implement actual form submission logic
+  // Enviar datos a Google Apps Script para integración con Google Sheets
   async submitLead(data) {
-    // Placeholder implementation
     console.log('Form data to submit:', data);
     
-    // Simulate API call
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        // Simulate success (replace with actual API call)
-        resolve(true);
-      }, 1000);
-    });
+    // Validar que la URL de Google Apps Script esté configurada
+    if (!CONFIG.form.googleAppsScriptUrl) {
+      console.error('Google Apps Script URL not configured');
+      this.showToast('Error de configuración. Por favor, contacte al administrador.', 'error');
+      return false;
+    }
     
-    // Example implementation for future integration:
-    /*
     try {
-      const response = await fetch(CONFIG.form.endpoint, {
+      // Preparar los datos para enviar a Google Apps Script
+      const scriptData = {
+        timestamp: new Date().toISOString(),
+        source: 'anicama_landing_page',
+        form_type: data.empresa ? 'hero_form' : 'contact_form',
+        nombres: data.nombres || '',
+        email: data.email || '',
+        celular: data.celular || data.telefono || '',
+        empresa: data.empresa || '',
+        ruc: data.ruc || '',
+        cargo: data.cargo || '',
+        mensaje: data.mensaje || '',
+        // Información adicional para el seguimiento
+        page_url: window.location.href,
+        user_agent: navigator.userAgent,
+        referrer: document.referrer || 'Direct'
+      };
+
+      // Realizar la petición a Google Apps Script
+      // Nota: Usamos mode: 'no-cors' para evitar problemas de CORS con Google Apps Script
+      const response = await fetch(CONFIG.form.googleAppsScriptUrl, {
         method: 'POST',
+        mode: 'no-cors', // Importante para Google Apps Script
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(scriptData),
         signal: AbortSignal.timeout(CONFIG.form.timeout)
       });
       
-      return response.ok;
+      // Con mode: 'no-cors', no podemos verificar response.ok o leer el JSON
+      // Pero si llega aquí sin error, significa que se envió correctamente
+      console.log('Lead successfully sent to Google Sheets');
+      return true;
+      
     } catch (error) {
-      console.error('Submission error:', error);
+      console.error('Error sending data to Google Apps Script:', error);
+      
+      // Manejo específico de errores
+      if (error.name === 'AbortError') {
+        this.showToast('La solicitud tardó demasiado tiempo. Por favor, inténtelo nuevamente.', 'error');
+      } else if (error.name === 'TypeError' && error.message.includes('fetch')) {
+        this.showToast('Error de conexión. Verifique su conexión a internet.', 'error');
+      } else {
+        this.showToast('Error al procesar la solicitud. Por favor, inténtelo más tarde.', 'error');
+      }
+      
       return false;
     }
-    */
   },
 
   setupHeroFormValidation() {
@@ -521,6 +573,19 @@ const formHandler = {
           this.validateField(input);
         }
       }, 300));
+
+      // Validación especial para campos de celular: solo números y máximo 9 dígitos
+      if (input.name === 'celular' || input.name === 'telefono') {
+        input.addEventListener('input', (e) => {
+          // Remover todo lo que no sea número
+          let value = e.target.value.replace(/\D/g, '');
+          // Limitar a 9 dígitos máximo
+          if (value.length > 9) {
+            value = value.slice(0, 9);
+          }
+          e.target.value = value;
+        });
+      }
     });
   },
 
