@@ -462,33 +462,36 @@ const formHandler = {
 
       // Show loading state
       const submitButton = form.querySelector('button[type="submit"]');
-      const originalText = submitButton.textContent;
-      submitButton.textContent = 'Enviando...';
-      submitButton.disabled = true;
+      this.setButtonLoading(submitButton, true);
 
       try {
         // Collect form data
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
         
-        // Submit form (placeholder - implement actual submission)
+        // Submit form
         const success = await this.submitLead(data);
         
         if (success) {
           analytics.trackFormSubmit(true);
-          this.showToast('¡Gracias! Hemos recibido su consulta. Nos contactaremos pronto.', 'success');
-          form.reset();
+          
+          // Show success states (sin redundancia)
+          this.setButtonLoading(submitButton, false);
+          this.showLightSuccessMessage(form);
+          
+          // Reset form after que el usuario vea el mensaje
+          setTimeout(() => {
+            form.reset();
+          }, 4000);
+          
         } else {
           throw new Error('Submission failed');
         }
       } catch (error) {
         analytics.trackFormSubmit(false, 'submission_error');
+        this.setButtonLoading(submitButton, false);
         this.showToast('Hubo un error al enviar el formulario. Por favor, inténtelo nuevamente.', 'error');
         console.error('Form submission error:', error);
-      } finally {
-        // Restore button state
-        submitButton.textContent = originalText;
-        submitButton.disabled = false;
       }
     });
   },
@@ -605,33 +608,36 @@ const formHandler = {
 
       // Show loading state
       const submitButton = form.querySelector('button[type="submit"]');
-      const originalText = submitButton.textContent;
-      submitButton.textContent = 'Enviando...';
-      submitButton.disabled = true;
+      this.setButtonLoading(submitButton, true);
 
       try {
         // Collect form data
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
         
-        // Submit form (placeholder - implement actual submission)
+        // Submit form
         const success = await this.submitLead(data);
         
         if (success) {
           analytics.trackFormSubmit(true);
-          this.showToast('¡Gracias! Hemos recibido su consulta. Nos contactaremos pronto.', 'success');
-          form.reset();
+          
+          // Show success states (sin redundancia)
+          this.setButtonLoading(submitButton, false);
+          this.showLightSuccessMessage(form);
+          
+          // Reset form after que el usuario vea el mensaje
+          setTimeout(() => {
+            form.reset();
+          }, 4000);
+          
         } else {
           throw new Error('Submission failed');
         }
       } catch (error) {
         analytics.trackFormSubmit(false, 'submission_error');
+        this.setButtonLoading(submitButton, false);
         this.showToast('Hubo un error al enviar el formulario. Por favor, inténtelo nuevamente.', 'error');
         console.error('Form submission error:', error);
-      } finally {
-        // Restore button state
-        submitButton.textContent = originalText;
-        submitButton.disabled = false;
       }
     });
   },
@@ -660,6 +666,85 @@ const formHandler = {
 
   showToast(message, type = 'info') {
     toastManager.show(message, type);
+  },
+
+  // ===== UI/UX HELPERS =====
+  setButtonLoading(button, isLoading, originalText = null) {
+    if (isLoading) {
+      button.dataset.originalText = originalText || button.textContent;
+      button.textContent = 'Enviando...';
+      button.classList.add('btn-submit--loading');
+      button.disabled = true;
+    } else {
+      // Transición suave de regreso al estado normal
+      button.textContent = button.dataset.originalText || 'Solicitar Consulta Gratuita';
+      button.classList.remove('btn-submit--loading');
+      
+      // Pequeña pausa antes de habilitar de nuevo (para evitar double-submit)
+      setTimeout(() => {
+        button.disabled = false;
+      }, 1000);
+      
+      delete button.dataset.originalText;
+    }
+  },
+
+  setButtonSuccess(button, duration = 3000) {
+    const originalText = button.dataset.originalText || button.textContent;
+    button.textContent = '¡Enviado!';
+    button.classList.add('btn-submit--success');
+    button.disabled = true;
+    
+    setTimeout(() => {
+      button.textContent = originalText;
+      button.classList.remove('btn-submit--success');
+      button.disabled = false;
+    }, duration);
+  },
+
+  showLightSuccessMessage(form) {
+    // Remover mensaje anterior si existe
+    const existingSuccess = form.querySelector('.form-success-light');
+    if (existingSuccess) {
+      existingSuccess.remove();
+    }
+
+    // Crear mensaje ligero
+    const successDiv = document.createElement('div');
+    successDiv.className = 'form-success-light';
+    successDiv.innerHTML = `
+      <span class="form-success-light__icon">✓</span>
+      <span class="form-success-light__text">¡Consulta enviada! Te contactaremos pronto.</span>
+    `;
+
+    // Agregar después del botón de envío
+    const submitButton = form.querySelector('button[type="submit"]');
+    submitButton.parentNode.insertBefore(successDiv, submitButton.nextSibling);
+
+    // Agregar efecto sutil al formulario
+    const formCard = form.closest('.form-card');
+    if (formCard) {
+      formCard.style.transform = 'scale(1.02)';
+      formCard.style.transition = 'transform 0.3s ease-out';
+      
+      // Restaurar después de un momento
+      setTimeout(() => {
+        formCard.style.transform = 'scale(1)';
+      }, 300);
+    }
+
+    // Auto-remover mensaje después de 5 segundos (más tiempo para leer)
+    setTimeout(() => {
+      if (successDiv.parentNode) {
+        successDiv.style.opacity = '0';
+        successDiv.style.transform = 'translateY(-10px)';
+        setTimeout(() => {
+          if (successDiv.parentNode) {
+            successDiv.remove();
+          }
+        }, 300);
+      }
+    }, 5000);
   }
 };
 
